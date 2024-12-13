@@ -1,0 +1,14 @@
+body{
+    box-sizing: border-box;
+    margin: 0;
+    /* background-image: url(./starry.jpg); */
+}
+
+#case{
+    display: flex;
+    flex-direction: column;
+    background-color: antiquewhite;
+    height: 500px;
+    width: 390px;
+    margin:  20px auto;
+}
