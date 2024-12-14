@@ -25,10 +25,15 @@ let result=0;
 //Operate function is used to call an arithmetic function based on the operator.
 function operate(operand1,operand2,operator){
     if(operator==='+') return add(operand1,operand2);
-    else if(operator==='-') return subtract(operand1,operand2);
-    else if(operator==='x') return multiply(operand1,operand2);
-    else if(operator==='÷') return divide(operand1,operand2);
-    else if(operator==='%') return remainder(operand1,operand2);
+    else if(operator==='-') return roundUp(subtract(operand1,operand2));
+    else if(operator==='x') return roundUp(multiply(operand1,operand2));
+    else if(operator==='÷') return roundUp(divide(operand1,operand2));
+    else if(operator==='%') return roundUp(remainder(operand1,operand2));
+}
+
+//roundUp function rounds a decimal number up to 3 decimal places;
+function roundUp(num){
+    return Math.ceil(num*1000)/1000;
 }
 
 //Create references to display partitions and initialize them with zero.
