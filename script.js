@@ -42,7 +42,9 @@ const digits=document.querySelectorAll(".digit");
 digits.forEach((digit)=>{
     digit.addEventListener('click',function(e){
         if(current.textContent==='0')current.textContent='';
-        current.textContent+=e.target.textContent;
+        if(!(e.target.textContent==='.' && current.textContent.includes('.'))){
+            current.textContent+=e.target.textContent;
+        }
     });
 });
 
@@ -58,6 +60,7 @@ operators.forEach((operator)=>{
 const clear=document.querySelector("#clear")
 clear.addEventListener('click',()=>{
     current.textContent='0';
+    previous.textContent='0';
 })
 
 //Add event listener for delete button.
