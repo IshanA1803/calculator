@@ -24,7 +24,13 @@ function remainder(operand1,operand2){
 //Insert the operator at the beginning of second operand.
 function extractor(expression){
     const regex = new RegExp(`([${operatorString}].*)`);
-    let extracted= expression.split(regex, 2);
+    let extracted;
+    if(expression[0]==='-'){
+        extracted= expression.slice(1).split(regex, 2);
+        extracted[0]='-'+extracted[0];
+    }else{
+        extracted= expression.split(regex, 2);
+    }
     return extracted;
 }
 
