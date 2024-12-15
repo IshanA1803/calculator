@@ -19,15 +19,36 @@ function remainder(operand1,operand2){
     return operand1%operand2;
 }
 
-//Variable to store the result of operation:
-let result=0;
-
-//String that stores all operators. We can use it to check if the input contains an operator.
-const operatorString='+-x÷%';
+//Extractor is used to separate the input expression into operands and operators.
+//Insert the operator at the end.
+function extractor(expression){
+    let extracted=[];
+    if(expression.includes('+')){
+        extracted=expression.split('+');
+        extracted.push('+');
+        return extracted;
+    }else if(expression.includes('-')){
+        extracted=expression.split('-');
+        extracted.push('-');
+        return extracted;
+    }else if(expression.includes('x')){
+        extracted=expression.split('x');
+        extracted.push('x');
+        return extracted;
+    }else if(expression.includes('÷')){
+        extracted=expression.split('÷');
+        extracted.push('÷');
+        return extracted;
+    }else if(expression.includes('%')){
+        extracted=expression.split('%');
+        extracted.push('%');
+        return extracted;
+    }
+}
 
 //Operate function is used to call an arithmetic function based on the operator.
 function operate(operand1,operand2,operator){
-    if(operator==='+') return add(operand1,operand2);
+    if(operator==='+') return roundUp(add(operand1,operand2));
     else if(operator==='-') return roundUp(subtract(operand1,operand2));
     else if(operator==='x') return roundUp(multiply(operand1,operand2));
     else if(operator==='÷') return roundUp(divide(operand1,operand2));
@@ -38,6 +59,12 @@ function operate(operand1,operand2,operator){
 function roundUp(num){
     return Math.ceil(num*1000)/1000;
 }
+
+//Variable to store the result of operation:
+let result=0;
+
+//String that stores all operators. We can use it to check if the input contains an operator.
+const operatorString='+-x÷%';
 
 //Create references to display partitions and initialize them with zero.
 const current=document.querySelector(".current");
@@ -94,25 +121,7 @@ deleteButton.addEventListener('click',()=>{
 const equalsTo=document.querySelector(".equalsTo");
 equalsTo.addEventListener('click',()=>{
     previous.textContent=""+result;
-    if(current.textContent.includes('+')){
-        const expression=current.textContent.split('+');
-        result=operate(+expression[0],+expression[1],'+');
-        current.textContent=result;
-    }else if(current.textContent.includes('-')){
-        const expression=current.textContent.split('-');
-        result=operate(+expression[0],+expression[1],'-');
-        current.textContent=result;
-    }else if(current.textContent.includes('x')){
-        const expression=current.textContent.split('x');
-        result=operate(+expression[0],+expression[1],'x');
-        current.textContent=result;
-    }else if(current.textContent.includes('÷')){
-        const expression=current.textContent.split('÷');
-        result=operate(+expression[0],+expression[1],'÷');
-        current.textContent=result;
-    }else if(current.textContent.includes('%')){
-        const expression=current.textContent.split('%');
-        result=operate(+expression[0],+expression[1],'%');
-        current.textContent=result;
-    }
+    const expression=extractor(current.textContent);
+    result=operate(+expression[0],+expression[1],expression[2]);
+    current.textContent=result;
 })
