@@ -22,6 +22,9 @@ function remainder(operand1,operand2){
 //Variable to store the result of operation:
 let result=0;
 
+//String that stores all operators. We can use it to check if the input contains an operator.
+const operatorString='+-x÷%';
+
 //Operate function is used to call an arithmetic function based on the operator.
 function operate(operand1,operand2,operator){
     if(operator==='+') return add(operand1,operand2);
@@ -42,7 +45,8 @@ current.textContent='0';
 const previous=document.querySelector(".previous");
 previous.textContent='0';
 
-//Add event listener for digit buttons.
+// Add event listener for digit buttons.
+// Limit decimal point to only one per expression.
 const digits=document.querySelectorAll(".digit");
 digits.forEach((digit)=>{
     digit.addEventListener('click',function(e){
@@ -54,10 +58,19 @@ digits.forEach((digit)=>{
 });
 
 //Add event listener for operators.
+//Prevent the user from entering an operator at the beginning of an expression.
+//Prevent the user from entering operators consecutively.
 const operators=document.querySelectorAll(".operator");
 operators.forEach((operator)=>{
     operator.addEventListener('click',function(e){
-        current.textContent+=e.target.textContent;
+        const currentString=current.textContent;
+        if(currentString !== "0" && currentString!==""){
+            if(operatorString.includes(currentString.at(-1))){
+                current.textContent=currentString.slice(0,-1)+e.target.textContent;
+            }else{
+                current.textContent+=e.target.textContent;
+            }
+        }
     });
 });
 
@@ -65,7 +78,7 @@ operators.forEach((operator)=>{
 const clear=document.querySelector("#clear")
 clear.addEventListener('click',()=>{
     current.textContent='0';
-    previous.textContent='0';
+    previous.textContent='0';      //Remove all existing data.
 })
 
 //Add event listener for delete button.
