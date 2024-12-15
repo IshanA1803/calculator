@@ -137,3 +137,34 @@ equalsTo.addEventListener('click',()=>{
     }
     suffixExpression="";
 })
+
+//Add event listener for key presses.
+document.addEventListener('keydown',function(e){
+    console.log(e.key);
+    const opString="+-*/%";
+    if((e.key>='0' && e.key<='9') || e.key==='.' || opString.includes(e.key)){
+        current.textContent+=e.key;
+    }else if(e.key==='Backspace'){ //Copy eventListener callback of delete button.
+        const string=current.textContent;
+        if(string==="ERROR"){ 
+            current.textContent='';
+        }else if(string!==''){
+            current.textContent=string.slice(0,-1);
+        }
+    }else if(e.key==='Delete'){
+        current.textContent='0'; //Copy eventListener callback of clear button.
+        previous.textContent='0';
+    }else if(e.key==='Enter'){   //Copy eventListener callback of equalsTo button.
+        previous.textContent=""+result;
+        const expression=extractor(current.textContent);
+        console.log(expression);
+        result=operate(expression[0],expression[1]);
+        if(result===Infinity){
+            result="ERROR";
+            current.textContent=result;
+        }else{
+            current.textContent=""+result+suffixExpression;
+        }
+        suffixExpression="";
+    }
+})
