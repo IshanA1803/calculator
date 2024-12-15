@@ -23,9 +23,8 @@ function remainder(operand1,operand2){
 //Limit the number of splits to 2.
 //Insert the operator at the end.
 function extractor(expression){
-    const regex = new RegExp(`(?:[${operatorString}])(.*)`);
+    const regex = new RegExp(`([${operatorString}].*)`);
     let extracted= expression.split(regex, 2);
-
     if(extracted.length===1){
         return extracted;
     }
@@ -98,18 +97,20 @@ digits.forEach((digit)=>{
 });
 
 //Add event listener for operators.
-//Prevent the user from entering an operator at the beginning of an expression.
+//Prevent the user from entering an operator at the beginning of an expression except negative.
 //Prevent the user from entering operators consecutively.
 const operators=document.querySelectorAll(".operator");
 operators.forEach((operator)=>{
     operator.addEventListener('click',function(e){
         const currentString=current.textContent;
-        if(currentString !== "0" && currentString!==""){
+        if(currentString !== "0" && currentString!=="" && currentString!=="-"){
             if(operatorString.includes(currentString.at(-1))){
                 current.textContent=currentString.slice(0,-1)+e.target.textContent;
             }else{
                 current.textContent+=e.target.textContent;
             }
+        }else if(e.target.textContent==='-'){
+            current.textContent=e.target.textContent;
         }
     });
 });
