@@ -19,43 +19,26 @@ function remainder(operand1,operand2){
     return operand1%operand2;
 }
 
-//Extractor is used to separate the input expression into operands and operators.
+//Extractor is used to separate the input expression into two operands.
 //Limit the number of splits to 2.
-//Insert the operator at the end.
+//Insert the operator at the beginning of second operand.
 function extractor(expression){
     const regex = new RegExp(`([${operatorString}].*)`);
     let extracted= expression.split(regex, 2);
-    if(extracted.length===1){
-        return extracted;
-    }
-
-    if(expression[extracted[0].length]==='+'){
-        extracted.push('+');
-        return extracted;
-    }else if(expression[extracted[0].length]==='-'){
-        extracted.push('-');
-        return extracted;
-    }else if(expression[extracted[0].length]==='x'){
-        extracted.push('x');
-        return extracted;
-    }else if(expression[extracted[0].length]==='÷'){
-        extracted.push('÷');
-        return extracted;
-    }else if(expression[extracted[0].length]==='%'){
-        extracted.push('%');
-        return extracted;
-    }
+    return extracted;
 }
 
 //Operate function is used to call an arithmetic function based on the operator.
-function operate(operand1,operand2,operator){
+function operate(operand1,operand2){
+    const operator=operand2[0];
     //Check if operand2 is an expression in itself.
-    const secondExpression=extractor(operand2);
+    const secondExpression=extractor(operand2.slice(1));
     console.log(secondExpression);
     if(secondExpression.length!==1){
-        suffixExpression=operand2.slice(secondExpression[0].length);
-        console.log(secondExpression.length);
+        suffixExpression=operand2.slice(secondExpression[0].length+1);
         operand2=secondExpression[0];
+    }else{
+        operand2=operand2.slice(1);
     }
     if(operator==='+') return roundUp(add(+operand1,+operand2));
     else if(operator==='-') return roundUp(subtract(+operand1,+operand2));
@@ -137,7 +120,7 @@ equalsTo.addEventListener('click',()=>{
     previous.textContent=""+result;
     const expression=extractor(current.textContent);
     console.log(expression);
-    result=operate(expression[0],expression[1],expression[2]);
+    result=operate(expression[0],expression[1]);
     current.textContent=""+result+suffixExpression;
     suffixExpression="";
 })
