@@ -67,6 +67,9 @@ body{
     cursor:pointer;
     transition:  transform 0.2s ease; 
 }
+#controls .equalsTo{
+    flex: 2 1 auto;
+}
 /* Footer of website */
 footer{
     display: flex;
