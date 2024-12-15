@@ -39,7 +39,6 @@ function operate(operand1,operand2){
     const operator=operand2[0];
     //Check if operand2 is an expression in itself.
     const secondExpression=extractor(operand2.slice(1));
-    console.log(secondExpression);
     if(secondExpression.length!==1){
         suffixExpression=operand2.slice(secondExpression[0].length+1);
         operand2=secondExpression[0];
@@ -127,7 +126,6 @@ const equalsTo=document.querySelector(".equalsTo");
 equalsTo.addEventListener('click',()=>{
     previous.textContent=""+result;
     const expression=extractor(current.textContent);
-    console.log(expression);
     result=operate(expression[0],expression[1]);
     if(result===Infinity || result===-Infinity){
         result="ERROR";
@@ -140,7 +138,6 @@ equalsTo.addEventListener('click',()=>{
 
 //Add event listener for key presses.
 document.addEventListener('keydown',function(e){
-    console.log(e.key);
     const opString="+-%";
     if((e.key>='0' && e.key<='9') || e.key==='.' || opString.includes(e.key)){
         current.textContent+=e.key;
@@ -161,7 +158,6 @@ document.addEventListener('keydown',function(e){
     }else if(e.key==='Enter' || e.key==='='){   //Copy eventListener callback of equalsTo button.
         previous.textContent=""+result;
         const expression=extractor(current.textContent);
-        console.log(expression);
         result=operate(expression[0],expression[1]);
         if(result===Infinity || result===-Infinity){
             result="ERROR";
