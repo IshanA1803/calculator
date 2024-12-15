@@ -115,7 +115,9 @@ clear.addEventListener('click',()=>{
 const deleteButton=document.querySelector("#delete");
 deleteButton.addEventListener('click',()=>{
     const string=current.textContent;
-    if(string!==''){
+    if(string==="ERROR"){ //See that the user doesn't have to remove all letters of ERROR himself.
+        current.textContent='';
+    }else if(string!==''){
         current.textContent=string.slice(0,-1);
     }
 })
@@ -127,6 +129,11 @@ equalsTo.addEventListener('click',()=>{
     const expression=extractor(current.textContent);
     console.log(expression);
     result=operate(expression[0],expression[1]);
-    current.textContent=""+result+suffixExpression;
+    if(result===Infinity){
+        result="ERROR";
+        current.textContent=result;
+    }else{
+        current.textContent=""+result+suffixExpression;
+    }
     suffixExpression="";
 })
