@@ -20,27 +20,29 @@ function remainder(operand1,operand2){
 }
 
 //Extractor is used to separate the input expression into operands and operators.
+//Limit the number of splits to 2.
 //Insert the operator at the end.
 function extractor(expression){
-    let extracted=[];
-    if(expression.includes('+')){
-        extracted=expression.split('+');
+    const regex = new RegExp(`(?:[${operatorString}])(.*)`);
+    let extracted= expression.split(regex, 2);
+
+    if(extracted.length===1){
+        return extracted;
+    }
+
+    if(expression[extracted[0].length]==='+'){
         extracted.push('+');
         return extracted;
-    }else if(expression.includes('-')){
-        extracted=expression.split('-');
+    }else if(expression[extracted[0].length]==='-'){
         extracted.push('-');
         return extracted;
-    }else if(expression.includes('x')){
-        extracted=expression.split('x');
+    }else if(expression[extracted[0].length]==='x'){
         extracted.push('x');
         return extracted;
-    }else if(expression.includes('÷')){
-        extracted=expression.split('÷');
+    }else if(expression[extracted[0].length]==='÷'){
         extracted.push('÷');
         return extracted;
-    }else if(expression.includes('%')){
-        extracted=expression.split('%');
+    }else if(expression[extracted[0].length]==='%'){
         extracted.push('%');
         return extracted;
     }
@@ -48,11 +50,19 @@ function extractor(expression){
 
 //Operate function is used to call an arithmetic function based on the operator.
 function operate(operand1,operand2,operator){
-    if(operator==='+') return roundUp(add(operand1,operand2));
-    else if(operator==='-') return roundUp(subtract(operand1,operand2));
-    else if(operator==='x') return roundUp(multiply(operand1,operand2));
-    else if(operator==='÷') return roundUp(divide(operand1,operand2));
-    else if(operator==='%') return roundUp(remainder(operand1,operand2));
+    //Check if operand2 is an expression in itself.
+    const secondExpression=extractor(operand2);
+    console.log(secondExpression);
+    if(secondExpression.length!==1){
+        suffixExpression=operand2.slice(secondExpression[0].length);
+        console.log(secondExpression.length);
+        operand2=secondExpression[0];
+    }
+    if(operator==='+') return roundUp(add(+operand1,+operand2));
+    else if(operator==='-') return roundUp(subtract(+operand1,+operand2));
+    else if(operator==='x') return roundUp(multiply(+operand1,+operand2));
+    else if(operator==='÷') return roundUp(divide(+operand1,+operand2));
+    else if(operator==='%') return roundUp(remainder(+operand1,+operand2));
 }
 
 //roundUp function rounds a decimal number up to 3 decimal places;
@@ -63,8 +73,11 @@ function roundUp(num){
 //Variable to store the result of operation:
 let result=0;
 
+//variable to store part of the expression which will not be evaluated.
+let suffixExpression="";
+
 //String that stores all operators. We can use it to check if the input contains an operator.
-const operatorString='+-x÷%';
+const operatorString='\\+\\-x÷%';
 
 //Create references to display partitions and initialize them with zero.
 const current=document.querySelector(".current");
@@ -122,6 +135,8 @@ const equalsTo=document.querySelector(".equalsTo");
 equalsTo.addEventListener('click',()=>{
     previous.textContent=""+result;
     const expression=extractor(current.textContent);
-    result=operate(+expression[0],+expression[1],expression[2]);
-    current.textContent=result;
+    console.log(expression);
+    result=operate(expression[0],expression[1],expression[2]);
+    current.textContent=""+result+suffixExpression;
+    suffixExpression="";
 })
